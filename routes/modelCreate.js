@@ -32,7 +32,7 @@ var route = function (req, res, next) {
 
         })(function () {
 
-            Promise.all([
+            const promises = [
                 linz.api.views.getScripts(req, res, [
                     {
                         src: '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js',
@@ -50,8 +50,28 @@ var route = function (req, res, next) {
                     },
                 ]),
                 linz.api.views.getStyles(req, res),
-            ])
-                .then(([scripts, styles]) => {
+            ];
+
+            const form = req.linz.model.linz.formtools.form;
+
+            if (form.formFooter) {
+
+                promises.push(form.formFooter(req, {
+                    cancelUrl: linz.api.url.getAdminLink(req.linz.model),
+                }));
+
+            }
+
+            if (form.formHeader) {
+
+                promises.push(form.formHeader(req, {
+                    cancelUrl: linz.api.url.getAdminLink(req.linz.model),
+                }));
+
+            }
+
+            Promise.all(promises)
+                .then(([scripts, styles, footer, header]) => {
 
                     const singular = inflection.humanize(req.linz.model.linz.formtools.model.label, true);
 
@@ -59,6 +79,8 @@ var route = function (req, res, next) {
                         actionUrl: linz.api.url.getAdminLink(req.linz.model, 'create'),
                         cancelUrl: linz.api.url.getAdminLink(req.linz.model),
                         form: editForm.render(),
+                        formFooterContent: footer,
+                        formHeaderContent: header,
                         label: {
                             singular,
                             plural: req.linz.model.linz.formtools.model.plural,

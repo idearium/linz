@@ -105,21 +105,43 @@ var route = function (req, res, next) {
 
         })(function () {
 
-            Promise.all([
+            const promises = [
                 linz.api.views.getScripts(req, res, defaultScripts),
                 linz.api.views.getStyles(req, res),
-            ])
-                .then(([scripts, styles]) => {
+            ];
+
+            const form = req.linz.model.linz.formtools.form;
+
+            if (form.formFooter) {
+
+                promises.push(form.formFooter(req, {
+                    cancelUrl: linz.api.url.getAdminLink(req.linz.model),
+                }));
+
+            }
+
+            if (form.formHeader) {
+
+                promises.push(form.formHeader(req, {
+                    cancelUrl: linz.api.url.getAdminLink(req.linz.model),
+                }));
+
+            }
+
+            Promise.all(promises)
+                .then(([scripts, styles, footer, header]) => {
 
                     return res.render(linz.api.views.viewPath('recordEdit.jade'), Object.assign(data, {
+                        actionUrl: linz.api.url.getAdminLink(req.linz.model, 'save', req.linz.record._id),
                         cancelUrl: linz.api.url.getAdminLink(req.linz.model),
                         conflictHandlersJS: conflictHandlersJS,
-                        form: editForm.render(),
-                        model: req.linz.model,
-                        record: req.linz.record,
-                        actionUrl: linz.api.url.getAdminLink(req.linz.model, 'save', req.linz.record._id),
                         customAttributes: res.locals.customAttributes,
+                        form: editForm.render(),
+                        formFooterContent: footer,
+                        formHeaderContent: header,
+                        model: req.linz.model,
                         pageTitle: `Editing '${req.linz.record.title}'`,
+                        record: req.linz.record,
                         scripts,
                         styles,
                         view: 'record-edit',

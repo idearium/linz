@@ -35,7 +35,7 @@ module.exports = function linzNamespaceForm (req, res, next) {
 
                 // if field is not of type documentarray or if it is, it's not implementing the embedded document plugin, exit
                 // if (field.type !== 'documentarray') {
-                if (field.type !== 'documentarray' || !field.schema.statics.getForm) {
+                if (!field || field.type !== 'documentarray' || !field.schema.statics.getForm) {
                     return callback();
                 }
 
