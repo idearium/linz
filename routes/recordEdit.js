@@ -111,21 +111,28 @@ var route = function (req, res, next) {
             ];
 
             const form = req.linz.model.linz.formtools.form;
+            const actionUrl = linz.api.url.getAdminLink(req.linz.model, 'create');
+            const cancelUrl = linz.api.url.getAdminLink(req.linz.model);
+
+            const renderFormActions = () => new Promise((resolve, reject) => linz.api.views.renderPartial('form-actions', {
+                actionUrl,
+                cancelUrl,
+            }, (err, html) => {
+
+                if (err) {
+                    return reject(err);
+                }
+
+                return resolve(html);
+
+            }));
 
             if (form.formFooter) {
-
-                promises.push(form.formFooter(req, {
-                    cancelUrl: linz.api.url.getAdminLink(req.linz.model),
-                }));
-
+                promises.push(renderFormActions().then(formActions => form.formFooter(req, { formActions })));
             }
 
             if (form.formHeader) {
-
-                promises.push(form.formHeader(req, {
-                    cancelUrl: linz.api.url.getAdminLink(req.linz.model),
-                }));
-
+                promises.push(renderFormActions().then(formActions => form.formHeader(req, { formActions })));
             }
 
             Promise.all(promises)

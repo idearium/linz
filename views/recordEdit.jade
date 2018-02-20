@@ -19,8 +19,7 @@ block content
 								if formHeaderContent
 									!= formHeaderContent
 								else
-									button.btn.btn-primary(type='submit') Save
-									a.btn.btn-link(href='#{c}') or cancel
+									include partials/form-actions
 						input(type="hidden", name="versionNo", value=record.__v)
 						!= form
 						.form-group.control-bar
@@ -28,8 +27,7 @@ block content
 								if formFooterContent
 									!= formFooterContent
 								else
-									button.btn.btn-primary(type='submit') Save
-									a.btn.btn-link(href='#{cancelUrl}') or cancel
+									include partials/form-actions
 					mixin documentarray()
 
 	script
