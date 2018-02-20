@@ -267,6 +267,20 @@ For example::
 
 The function receives a HTTP request object, which provides lots of flexibility to alter the DSL object returned based on the user making the request, and the model record itself.
 
+Custom form header and footers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can also customise the header and footer content of Linz forms. To do this, provide a function `formHeader` or `formFooter` in the form object that takes the parameters `req` and `locals` and returns a Promise.
+
+For example::
+
+  {
+    form: {
+      formFooter: (req, locals) => Promise.resolve(`${locals.formActions}<p>This is an example header</p>`),
+    }
+  }
+
+
 Model permissions
 -----------------
 
