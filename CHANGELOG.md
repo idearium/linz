@@ -10,6 +10,7 @@
 - Added a new `linz.api.session.getTimezone(req)` function that allows you to get the timezone offset of the current user.
 - Added the ability to transform date fields in the Linz export through `useLocalTime` which converts the time to the local browser time.
 - Added a `dateFormat` option which adds the ability to export the date in a different format (Uses moment datetime formats).
+- Add the ability to provide a custom renderer for form footers and actions. To do this, add a `formHeader` or `formFooter` property to the formDSL that takes a req object and locals and returns a promise. `formHeader: (req, locals) => Promise.resolve(\`${locals.formActions}\<p>Some text below the buttons</p>`)`
 
 ## v1.0.0-15.0.0 (24 November 2017)
 
