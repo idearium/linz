@@ -15,7 +15,7 @@
   "dependencies": {
     "async": "1.5.0",
     "body-parser": "1.0.x",
-    "bunyan": "0.22.x",
+    "bunyan": "1.8.10",
     "camelcase": "2.0.1",
     "chalk": "~0.4.0",
     "clone": "1.0.2",
