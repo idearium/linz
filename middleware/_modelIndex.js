@@ -193,7 +193,7 @@ module.exports = function  (req, res, next) {
 
                     if (req.linz.model.grid.paging.active === true) {
                         // add in paging skip and limit
-                        query.skip(pageIndex*pageSize-pageSize).limit(pageSize);
+                        query.skip(pageIndex*pageSize-pageSize).limit(Number.parseInt(pageSize));
                     }
 
                     query.exec(function (err, docs) {
